@@ -1,16 +1,11 @@
 package com.token.dvco.token_kotlin
 
-import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.widget.Adapter
-import android.widget.ListView
-import android.widget.Toast
 import com.google.gson.Gson
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.longToast
 import org.jetbrains.anko.uiThread
 import java.net.URL
 
@@ -20,42 +15,39 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val req : Request = Request()
-        var str : String = String()
-        val rec_view = findViewById(R.id.list) as RecyclerView
-        val lin_man = LinearLayoutManager(this)
+        val getrequest : Request = Request()
+        val recyclerview = findViewById(R.id.list) as RecyclerView
+        val layoutmanager = LinearLayoutManager(this)
+
         doAsync {
-            str = req.run()
+            val jsonstring = getrequest.run()
             uiThread {
                 val gson = Gson()
+                val strings = gson.fromJson(jsonstring, gameList::class.java)
 
-                val strings = gson.fromJson(str, Game::class.java)
-
-                rec_view.layoutManager = lin_man
+                recyclerview.layoutManager = layoutmanager
 
                 val adapter = RecyclerAdapter(strings.games)
-
-                rec_view.adapter = adapter
+                recyclerview.adapter = adapter
 
             }
         }
-
 
     }
 
     class Request {
 
         fun run() : String {
-            val jsonstr = URL("https://dl.dropboxusercontent.com/s/1b7jlwii7jfvuh0/games").readText()
-            return jsonstr
+            val jsonstring = URL("https://dl.dropboxusercontent.com/s/1b7jlwii7jfvuh0/games").readText()
+            return jsonstring
         }
     }
 
-    class Game {
-        val games : List<Gaem> = emptyList()
+    class gameList {
+        val games : List<Game> = emptyList()
     }
 
-    class Gaem{
+    class Game{
         var id : Int = 0
         var name : String = String()
         var image : String = String()

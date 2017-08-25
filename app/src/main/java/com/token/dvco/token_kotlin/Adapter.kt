@@ -1,6 +1,5 @@
 package com.token.dvco.token_kotlin
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 
-class RecyclerAdapter(strings : List<MainActivity.Gaem>) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
-    val str = strings
+class RecyclerAdapter(games: List<MainActivity.Game>) : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
+    val gamesStrings = games
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder? {
@@ -19,19 +18,27 @@ class RecyclerAdapter(strings : List<MainActivity.Gaem>) : RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: RecyclerAdapter.ViewHolder, position: Int) {
-        val text = str[position]
+        val parsedtxt = gamesStrings[position]
 
-        holder.title.text = text.name
-        Picasso.with(holder.image.context).load(text.image).resize(250,250).centerCrop().into(holder.image)
-        holder.trailer.text = text.trailer
-        holder.release.text = text.release
-        holder.platforms.text = text.platforms.toString()
+        holder.title.text = parsedtxt.name
+        Picasso.with(holder.image.context).load(parsedtxt.image).resize(250,250).centerCrop().into(holder.image)
+        holder.trailer.text = parsedtxt.trailer
+        holder.release.text = parsedtxt.release
 
+        val sb = StringBuilder("Disponivel em : ")
+        val platforms = parsedtxt.platforms
+            if (platforms != null) {
+                for (i in platforms) {
+                    sb.append(i).append(", ")
+            }
+        }
+        sb.delete(sb.length-2, sb.length-1)
+        holder.platforms.text = sb
 
     }
 
     override fun getItemCount(): Int {
-        return str.size
+        return gamesStrings.size
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view){
