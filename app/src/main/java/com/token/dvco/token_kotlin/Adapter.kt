@@ -1,6 +1,7 @@
 package com.token.dvco.token_kotlin
 
 import android.support.v7.widget.RecyclerView
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,8 +22,9 @@ class RecyclerAdapter(games: List<MainActivity.Game>) : RecyclerView.Adapter<Rec
         val parsedtxt = gamesStrings[position]
 
         holder.title.text = parsedtxt.name
-        Picasso.with(holder.image.context).load(parsedtxt.image).resize(250,250).centerCrop().into(holder.image)
+        Picasso.with(holder.image.context).load(parsedtxt.image).resize(300,300).centerCrop().into(holder.image)
         holder.trailer.text = parsedtxt.trailer
+        holder.trailer.movementMethod = LinkMovementMethod.getInstance()
         holder.release.text = parsedtxt.release
 
         val sb = StringBuilder("Disponivel em : ")
